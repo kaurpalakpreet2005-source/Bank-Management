@@ -1,0 +1,169 @@
+from tkinter import *
+from tkinter import ttk
+import tkinter.font as f
+from tkcalendar import DateEntry
+from tkinter import messagebox
+import mysql.connector as ms
+from datetime import datetime
+import pandas as pd
+import os
+try:
+    con=ms.connect(host="localhost",user="root",database="bankmgt")
+except:
+    print("Error: connection is unsuccessful")
+else:
+    print("Connection successful")
+
+def show_statement(tree,Us):
+    pass
+
+def statement(Us,cname):
+    win=Toplevel()
+    win.state("zoomed")
+    f1=f.Font(family="Proxima Nova",size=18,weight="bold")
+    f2=f.Font(family="Aerial",size=17,weight="bold")
+    f3=f.Font(family="Aerial",size=30,weight="bold")
+    f4=f.Font(family="Aerial",size=10)
+    f5=f.Font(family="Aerial",size=21,weight="bold")
+    
+    frame7=Frame(win,background="#a10e38")
+    frame7.place(height=1500,width=1800)
+
+    frame8=Frame(frame7,background="#a10e38")
+    frame8.place(height=200,width=1800,x=0,y=120)
+
+    image=PhotoImage(file="pnbH.png")
+    labell=Label(frame7,image=image,bg="#a10e38")
+    labell.image=image
+    labell.place(x=400,y=12)
+
+    label11=Label(frame8,text="Customer Name         :",font=f2,background="#a10e38",fg="white")
+    label11.grid(row=0,column=0)
+
+    label2=Label(frame8,text=cname,font=f2,background="#a10e38",fg="white")
+    label2.grid(row=0,column=1)
+
+    label3=Label(frame8,text="Branch Contact No.  :",font=f2,background="#a10e38",fg="white")
+    label3.grid(row=1,column=0)
+
+    label4=Label(frame8,text="  0161-2493276  ",font=f2,background="#a10e38",fg="white")
+    label4.grid(row=1,column=1)
+
+    label5=Label(frame8,text="Customer Care No.   :",font=f2,background="#a10e38",fg="white")
+    label5.grid(row=2,column=0)
+
+    label6=Label(frame8,text="1800 1800  ",font=f2,background="#a10e38",fg="white")
+    label6.grid(row=2,column=1)
+
+    label7=Label(frame8,text="IFSC Code                   :",font=f2,background="#a10e38",fg="white")
+    label7.grid(row=3,column=0)
+
+    label8=Label(frame8,text="  PUNB0443300  ",font=f2,background="#a10e38",fg="white")
+    label8.grid(row=3,column=1)
+
+    label9=Label(frame8,text="Statement for Period:",font=f2,background="#a10e38",fg="white")
+    label9.grid(row=4,column=0)
+
+    global label10
+    global label12
+    
+    
+    label10=DateEntry(frame8,selectmode="day",state="readonly",date_pattern="yyyy-mm-dd")
+    label10.place(x=260,y=140)
+    
+
+    label11=Label(frame8,text="to ",font=f2,background="#a10e38",fg="white")
+    label11.place(x=363,y=133)
+
+    
+    
+    label12=DateEntry(frame8,selectmode="day",state="readonly",date_pattern="yyyy-mm-dd")
+    label12.place(x=400,y=140)
+
+   
+    today=datetime.today().strftime("%d/%m/%Y")
+
+    date_label = Label(frame7,text="Date :  " + today,font=f2,bg="#a10e38",fg="white")
+    date_label.place(x=1100, y=109)
+    
+    style = ttk.Style()
+    style.configure("Treeview.Heading",background="#a10e38",foreground="black", font=("Aerial", 15))
+
+    table_frame=Frame(frame7)
+    table_frame.place(x=0,y=330,width=1400,height=400)
+
+    scroll_y = Scrollbar(table_frame,orient=VERTICAL)
+    
+
+
+    tree=ttk.Treeview(table_frame,columns=("withdrawal","deposit","balance","narration"),show="tree headings",height=300,yscrollcommand=scroll_y.set)
+
+    scroll_y.config(command=tree.yview)
+    scroll_y.pack(side=RIGHT, fill=Y)
+    tree.heading("#0", text="Date")
+    tree.column("#0", width=150, anchor=CENTER)
+    tree.heading("withdrawal", text="Withdrawal")
+    tree.heading("deposit", text="Deposit")
+    tree.heading("balance", text="Balance")
+    tree.heading("narration", text="Narration")
+    
+    tree.column("withdrawal", width=250, anchor=CENTER)
+    tree.column("deposit", width=250, anchor=CENTER)
+    tree.column("balance", width=250, anchor=CENTER)
+    tree.column("narration", width=500, anchor=CENTER)
+    tree.pack(side=LEFT, fill=BOTH, expand=True) 
+
+    btn_show = Button(frame8,text="Show",font=f4,bg="white",fg="black",command=lambda:show_statement(tree,Us))
+    btn_show.place(x=510, y=140)
+    
+    
+
+def show_statement(tree,Us):
+
+    
+    for item in tree.get_children():
+        tree.delete(item)
+
+    if not os.path.exists(Us + ".csv"):
+        messagebox.showerror("Error","Transaction file not found")
+        return
+
+    try:
+        from_date = pd.to_datetime(label10.get())
+        to_date = pd.to_datetime(label12.get())
+
+        df = pd.read_csv(Us + ".csv")
+        df["Date"] = pd.to_datetime(df["Date"],format="%d/%m/%Y")
+
+        filtered_df = df[(df["Date"] >= from_date) & (df["Date"] <= to_date)]
+        balance = 0
+
+        for index, row in filtered_df.iterrows():
+
+            
+            trans_type = str(row["Type of Transaction"])
+            amount = float(row["Amount"])
+            withdraw_amt = ""
+            deposit_amt = ""
+
+            if trans_type.lower() == "deposit":
+                deposit_amt = amount
+                balance += amount
+
+            elif trans_type.lower() == "withdraw":
+                withdraw_amt = amount
+                balance -= amount
+
+            tree.insert(
+                "",
+                END,
+                text=row["Date"].strftime("%d/%m/%Y"),
+                values=(withdraw_amt,deposit_amt,balance,row["Description"]))
+
+        if filtered_df.empty:
+            messagebox.showinfo("No Records","No transactions found between selected dates.")
+
+    except Exception as e:
+        messagebox.showerror("Error",str(e))
+
+    
