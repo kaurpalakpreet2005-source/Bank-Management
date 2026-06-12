@@ -1,0 +1,15 @@
+Sr. no,Date,Type of Transaction,Amount,Description
+1,2/6/2026,Deposit,2000,Initial Amount
+2,2/6/2026,Deposit,1000,Salary
+3,2/6/2026,Withdraw,257,Mobile Recharge
+4,2/6/2026,Deposit,1000,EMI
+5,2/6/2026,Withdraw,1000,EMI
+6,2/6/2026,Withdraw,100,Recharge
+7,2/6/2026,Deposit,100,Cash Deposit
+8,2/6/2026,Withdraw,100,gift
+9,02/06/2026,Deposit,1000,Cash Deposit
+10,02/06/2026,Withdraw,1500,ATM Withdraw
+11,02/06/2026,Withdraw,1200,Grocery
+12,03/06/2026,Withdraw,1800,Fuel Payment
+13,03/06/2026,Withdraw,499,Online Subscription
+14,03/06/2026,Deposit,10000,Cash Deposit

@@ -1,0 +1,12 @@
+Sr. no,Date,Type of Transaction,Amount,Description
+1,1/6/2026,Deposit,1000,Initial Amount
+2,1/6/2026,Deposit,8000,Salary Received
+3,1/6/2026,Withdraw,1000,Loan EMI
+4,03/06/2026,Deposit,25000,Salary
+5,03/06/2026,Withdraw,1400,ATM Withdrawal
+6,03/06/2026,Deposit,1240,Interest Credit
+7,03/06/2026,Withdraw,1000,Restaurant Payment
+8,03/06/2026,Withdraw,1200,Electricity Bill
+9,03/06/2026,Withdraw,1200,Fuel Payment
+10,03/06/2026,Withdraw,259,Mobile Recharge
+11,03/06/2026,Withdraw,2500,Online Shopping
