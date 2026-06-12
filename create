@@ -30,12 +30,18 @@ def create(oldwin):
     cre=Label(frame2,text="CREATE ACCOUNT",font=f1)
     cre.pack(fill=X)
 
+    def move_next(event):
+         event.widget.tk_focusNext().focus()
+         return "break"
+
     label3=Label(frame2,text="Username",font=f2,background="#a10e38",fg="white")
     label3.place(x=50,y=110)
 
     Us=StringVar()
     us=Entry(frame2,textvariable=Us,width=50)
     us.place(x=300,y=115)
+    us.bind("<Return>",move_next)
+    
 
     label3=Label(frame2,text="Password",font=f2,background="#a10e38",fg="white")
     label3.place(x=50,y=160)
@@ -43,6 +49,7 @@ def create(oldwin):
     Pas=StringVar()
     pas=Entry(frame2,textvariable=Pas,width=50)
     pas.place(x=300,y=165)
+    pas.bind("<Return>",move_next)
 
     label4=Label(frame2,text="Account Number",font=f2,background="#a10e38",fg="white")
     label4.place(x=50,y=212)
@@ -50,6 +57,7 @@ def create(oldwin):
     Acc=StringVar()
     acc=Entry(frame2,textvariable=Acc,width=50)
     acc.place(x=300,y=216)
+    acc.bind("<Return>",move_next)
 
     label5=Label(frame2,text="Name",font=f2,background="#a10e38",fg="white")
     label5.place(x=50,y=265)
@@ -57,6 +65,7 @@ def create(oldwin):
     Nam=StringVar()
     nam=Entry(frame2,textvariable=Nam,width=50)
     nam.place(x=300,y=266)
+    nam.bind("<Return>",move_next)
 
     label6=Label(frame2,text="Account Type",font=f2,background="#a10e38",fg="white")
     label6.place(x=50,y=317)
@@ -68,6 +77,7 @@ def create(oldwin):
                    "Current account"
                    )
     typee.place(x=300,y=320)
+    typee.bind("<Return>",move_next)
 
     label7=Label(frame2,text="Initial Amount",font=f2,background="#a10e38",fg="white")
     label7.place(x=50,y=370)
@@ -75,6 +85,7 @@ def create(oldwin):
     Amt=StringVar()
     amt=Entry(frame2,textvariable=Amt,width=50)
     amt.place(x=300,y=373)
+    amt.bind("<Return>",move_next)
 
     label8=Label(frame2,text="Phone Number",font=f2,background="#a10e38",fg="white")
     label8.place(x=50,y=422)
@@ -82,11 +93,11 @@ def create(oldwin):
     Phn=StringVar()
     phn=Entry(frame2,textvariable=Phn,width=50)
     phn.place(x=300,y=425)
+    phn.bind("<Return>",move_next)
 
     label9=Label(frame2,text="Gender",font=f2,background="#a10e38",fg="white")
     label9.place(x=50,y=473)
 
-    
     gen=ttk.Combobox(frame2,width=47,state="readonly")
     gen["values"]=("Female",
                    "Male",
@@ -94,14 +105,15 @@ def create(oldwin):
                    )
     gen.set("Select Gender")
     gen.place(x=300,y=475)
+    gen.bind("<Return>",move_next)
 
     label9=Label(frame2,text="Date of Birth",font=f2,background="#a10e38",fg="white")
     label9.place(x=50,y=522)
 
     cal=DateEntry(frame2,selectmode="day",state="readonly",date_pattern="yyyy-mm-dd")
     cal.place(x=300,y=524)
+    cal.bind("<Return>",move_next)
     
-
     label10=Label(frame2,text="Email",font=f2,background="#a10e38",fg="white")
     label10.place(x=750,y=200)
 
@@ -120,6 +132,7 @@ def create(oldwin):
     Email=StringVar()
     email=Entry(frame2,textvariable=Email,width=50)
     email.place(x=860,y=205)
+    email.bind("<Return>",move_next)
 
     def submit():
         cursor=con.cursor()
@@ -150,7 +163,6 @@ def create(oldwin):
         
         df = pd.DataFrame(data)
         df.to_csv(Us.get()+".csv", index=False)
-            
 
     clear_bt=Button(frame2,text="Submit",font=f2,bg="white",relief="groove",command=submit)
     clear_bt.place(x=750,y=370)
@@ -161,4 +173,4 @@ def create(oldwin):
     checkbox = Checkbutton(frame2,bg="#9e163c",fg="white",font=f4,text="I hereby declare all these details are correct and all the documents have been submitted.")
     checkbox.place(x=730,y=300)
 
-
+    us.focus_set()
